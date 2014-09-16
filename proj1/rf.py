@@ -11,9 +11,9 @@ relation = 1
 
 def classify(x, y, cv, criterion='gini', n_estimator=10):
     acc, prec, recall = [], [], []
+    clf = RandomForestClassifier(criterion=criterion, n_estimators=n_estimator)
     for train, test in cv:
         x_train, x_test, y_train, y_test = x[train] , x[test] , y[train] , y[test]
-        clf = RandomForestClassifier(criterion=criterion, n_estimators=n_estimator)
         clf.fit(x_train, y_train)
         y_pred = clf.predict(x_test)
         acc.append(accuracy_score(y_test, y_pred))
@@ -38,14 +38,14 @@ def main():
             print "accuracy: {}".format(a)
     if relation:
         res = []
-        for k in xrange(1,50+1):
+        for k in xrange(1, 50 + 1):
             print 'num of trees:{}'.format(k)
             a, p, r, f = classify(x, y, kf, criterion='entropy', n_estimator=k)
-            print a,p,r,f
-            res.append((a,p,r,f))
-        with open('../data/rf_trees','w') as out:
+            print a, p, r, f
+            res.append((a, p, r, f))
+        with open('../data/rf_trees', 'w') as out:
             for v in res:
-                out.write('{},{},{},{}\n'.format(v[0],v[1],v[2],v[3]))
+                out.write('{},{},{},{}\n'.format(v[0], v[1], v[2], v[3]))
     
 if __name__ == "__main__":
     main()
