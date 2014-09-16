@@ -38,12 +38,12 @@ def main():
             print "accuracy: {}".format(a)
     if relation:
         res = []
-        for k in xrange(1, 50 + 1):
-            print 'num of trees:{}'.format(k)
-            a, p, r, f = classify(x, y, kf, criterion='entropy', n_estimator=k)
+        for k in xrange(1, 20 + 1):
+            print 'num of trees:{}'.format(k * 10)
+            a, p, r, f = classify(x, y, kf, criterion='entropy', n_estimator=k * 10)
             print a, p, r, f
             res.append((a, p, r, f))
-        with open('../data/rf_trees', 'w') as out:
+        with open('res/rf_trees', 'w') as out:
             for v in res:
                 out.write('{},{},{},{}\n'.format(v[0], v[1], v[2], v[3]))
     
