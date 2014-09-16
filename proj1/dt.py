@@ -6,8 +6,8 @@ import numpy as np
 
 n_fold = 5
 criteria = ['gini', 'entropy']
-evaluation = 1
-plot = 0
+evaluation = 0
+plot = 1
 
 def main():
     x, y = load_data(k=2)
@@ -15,11 +15,12 @@ def main():
         kf = cross_validation.KFold(len(x), n_fold)
         for criterion in criteria:
             print 'criterion: {}'.format(criterion)
-            acc, prec, recall = [], [], []
+            acc, prec, recall, node_cnt = [], [], [], []
+            clf = DecisionTreeClassifier(criterion=criterion)
             for train, test in kf:
                 x_train, x_test, y_train, y_test = x[train] , x[test] , y[train] , y[test]
-                clf = DecisionTreeClassifier(criterion=criterion)
                 clf.fit(x_train, y_train)
+                node_cnt.append(clf.tree_.node_count)
                 y_pred = clf.predict(x_test)
                 acc.append(accuracy_score(y_test, y_pred))
                 prec.append(precision_score(y_test, y_pred))
@@ -32,6 +33,7 @@ def main():
             print "recall: {}".format(r)
             print "f1: {}".format(f)
             print "accuracy: {}".format(a)
+            print "nodes: {}".format(np.mean(node_cnt))
     
     if plot:
         from sklearn.externals.six import StringIO
@@ -39,10 +41,12 @@ def main():
         import pydot
         clf = DecisionTreeClassifier(criterion='entropy')
         clf.fit(x, y)
+        print clf.tree_.max_depth
+        print clf.tree_.node_count
         dot_data = StringIO()
         tree.export_graphviz(clf, max_depth=3, out_file=dot_data)
         graph = pydot.graph_from_dot_data(dot_data.getvalue()) 
-        graph.write_pdf("test.pdf") 
+        graph.write_pdf("figs/test.pdf") 
 #         with open('test.dot', 'w') as f:
 #             f = tree.export_graphviz(clf, max_depth=4, out_file=f)
         
