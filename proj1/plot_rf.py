@@ -16,10 +16,10 @@ for i in xrange(4):
     ref = [baseline[i] for j in xrange(len(d))]
     plt.clf()
     plt.plot(idx, d, label='Random Forest')
-    plt.plot(idx, ref, label='Decision Tree')
+    plt.plot(idx, ref, '--')
     plt.xlabel("Number of trees")
     plt.ylabel(labels[i])
-    plt.legend(numpoints=1, loc=4)
+#     plt.legend(numpoints=1, loc=4)
     plt.savefig('figs/compare_{}.png'.format(labels[i]))
 #     plt.show()
     plt.close()

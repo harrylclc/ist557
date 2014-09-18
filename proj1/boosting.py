@@ -13,8 +13,13 @@ relation = 1
 
 def classify(x, y, cv, n_estimator=50):
     acc, prec, recall = [], [], []
-    base_clf = DecisionTreeClassifier()
-    clf = AdaBoostClassifier(n_estimators=n_estimator)
+    base_clf = DecisionTreeClassifier(compute_importances=None, criterion='entropy',
+            max_depth=1, max_features=None, max_leaf_nodes=None,
+            min_density=None, min_samples_leaf=1, min_samples_split=2,
+            random_state=None, splitter='best')
+    
+    global clf
+    clf = AdaBoostClassifier(base_estimator=base_clf, n_estimators=n_estimator)
     for train, test in cv:
         x_train, x_test, y_train, y_test = x[train] , x[test] , y[train] , y[test]
         clf = clf.fit(x_train, y_train)
@@ -31,7 +36,7 @@ def classify(x, y, cv, n_estimator=50):
 def main():
     x, y = load_data(k=2)
     kf = cross_validation.KFold(len(x), n_fold)
-    a, p, r, f = classify(x, y, kf, n_estimator=10)
+    a, p, r, f = classify(x, y, kf, n_estimator=50)
     print 'precision: {}'.format(p)
     print "recall: {}".format(r)
     print "f1: {}".format(f)
