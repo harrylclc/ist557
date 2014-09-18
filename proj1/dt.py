@@ -39,12 +39,12 @@ def main():
         from sklearn.externals.six import StringIO
         from sklearn import tree
         import pydot
-        clf = DecisionTreeClassifier(criterion='entropy')
+        clf = DecisionTreeClassifier(criterion='entropy', max_leaf_nodes=41)
         clf.fit(x, y)
         print clf.tree_.max_depth
         print clf.tree_.node_count
         dot_data = StringIO()
-        tree.export_graphviz(clf, max_depth=3, out_file=dot_data)
+        tree.export_graphviz(clf, out_file=dot_data)
         graph = pydot.graph_from_dot_data(dot_data.getvalue()) 
         graph.write_pdf("figs/test.pdf") 
 #         with open('test.dot', 'w') as f:
