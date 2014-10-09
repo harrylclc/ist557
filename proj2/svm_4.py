@@ -10,7 +10,7 @@ x, y = load_data(k=2)
 kf = cross_validation.KFold(x.shape[0], n_fold)
 # kf = cross_validation.StratifiedKFold(y, n_fold)
 acc, prec, recall = [], [], []
-clf = svm.LinearSVC()
+clf = svm.SVC()
 scaler = preprocessing.StandardScaler()
 
 for train, test in kf:
