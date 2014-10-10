@@ -4,13 +4,16 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn import cross_validation
 import numpy as np
 from sklearn import preprocessing
+import math
 n_fold = 5
 max_exp = 4
 
 def choose_c_gamma(x, y):
     kf = cross_validation.KFold(len(x), n_fold)
-    c_set = np.logspace(start=-max_exp, stop=max_exp, num=2 * max_exp + 1, base=2)
-    gamma_set = np.logspace(start=-max_exp, stop=max_exp, num=2 * max_exp + 1, base=2)
+#     c_set = np.logspace(start=-max_exp, stop=max_exp, num=2 * max_exp + 1, base=2)
+    c_set = [ math.pow(2, i) for i in xrange(-4, 5)]
+    gamma_set = [ math.pow(2, i) for i in xrange(-8, 5)]
+#     gamma_set = np.logspace(start=-max_exp, stop=max_exp, num=2 * max_exp + 1, base=2)
     a_score = [[[] for j in xrange(len(gamma_set))] for i in xrange(len(c_set))]
     scaler = preprocessing.StandardScaler()
     k_in = 0
@@ -24,7 +27,6 @@ def choose_c_gamma(x, y):
                 clf.fit(scaler.transform(x_train), y_train)
                 y_pred = clf.predict(scaler.transform(x_test))
                 acc = accuracy_score(y_test, y_pred)
-                print c_idx, g_idx
                 a_score[c_idx][g_idx].append(acc)
                 print 'c:{} g:{} accuracy: {}'.format(c, gamma, acc)
         k_in += 1
@@ -44,7 +46,10 @@ def choose_c_gamma(x, y):
 def main():
     global k_out
     k_out = 0
-    x, y = load_data(k=2)
+    x, y = load_data(k=3)
+    print 'sampled example: {}'.format(len(y))
+    print 'positive examples: {}'.format(np.count_nonzero(y))
+#     exit()
     kf = cross_validation.KFold(len(x), n_fold)
     scaler = preprocessing.StandardScaler()
     acc, prec, recall = [], [], []
@@ -73,5 +78,3 @@ def main():
       
 if __name__ == "__main__":
     main()
-    
-        
