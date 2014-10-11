@@ -16,7 +16,7 @@ for train, test in kf:
     print 'iter {}'.format(len(acc))
     x_train, x_test, y_train, y_test = x[train] , x[test] , y[train] , y[test]
     scaler.fit(x_train)
-    clf = svm.SVC()
+    clf = svm.SVC(gamma=1/72.)
     clf.fit(scaler.transform(x_train), y_train)
     y_pred = clf.predict(scaler.transform(x_test))
     acc.append(accuracy_score(y_test, y_pred))

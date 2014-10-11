@@ -9,7 +9,10 @@ n_fold = 5
 is_lda = 0
 
 x, y = load_data(k=2)
-# pca = PCA(n_components=72)
+pca = PCA(n_components=10)
+pca.fit(x)
+# print pca.explained_variance_ratio_
+x = pca.transform(x)
 # x = pca.fit_transform(x)
 # exit()
 

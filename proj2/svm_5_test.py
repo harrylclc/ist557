@@ -9,7 +9,8 @@ n_fold = 5
 max_exp = 4
 
 def choose_c_gamma(x, y):
-    kf = cross_validation.KFold(len(x), n_fold)
+#     kf = cross_validation.KFold(len(x), n_fold)
+    kf = cross_validation.StratifiedKFold(y, n_fold)
 #     c_set = np.logspace(start=-max_exp, stop=max_exp, num=2 * max_exp + 1, base=2)
     c_set = [ math.pow(2, i) for i in xrange(-4, 5)]
     gamma_set = [ math.pow(2, i) for i in xrange(-8, 5)]
