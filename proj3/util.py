@@ -1,6 +1,7 @@
 from sklearn.datasets import load_iris
+from sklearn.preprocessing  import scale, StandardScaler
 import numpy as np
-def load_data(k=0):
+def load_data(k=0, scale=True):
     print 'loading'
     if k == 0:
         iris = load_iris()
@@ -16,9 +17,31 @@ def load_data(k=0):
                 y.append(labels[s[-1]])
         x = np.array(x)
         y = np.array(y)
+    elif k == 2:
+        x, y = [], []
+        with open('../data/glass.data') as f:
+            for line in f:
+                s = line.strip().split(',')
+                x.append([float(v) for v in s[1:-1]])
+                y.append(int(s[-1]))
+        x = np.array(x)
+        y = np.array(y)
+    elif k==3:
+        x, y = [], []
+        with open('../data/wine.data') as f:
+            for line in f:
+                s = line.strip().split(',')
+                x.append([float(v) for v in s[1:]])
+                y.append(int(s[0]))
+        x = np.array(x)
+        y = np.array(y)
+    if scale:
+        scaler = StandardScaler()
+        scaler.fit(x)
+        x = scaler.transform(x)
     print 'done'
     return x, y
 
 if __name__ == "__main__":
-    x, y = load_data(1)
-    print x,y
+    x, y = load_data(2)
+    print x, y

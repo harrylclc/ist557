@@ -1,4 +1,4 @@
-from sklearn.cluster import KMeans
+from sklearn.mixture import GMM
 from sklearn import metrics
 from util import load_data
 import matplotlib.pyplot as pl
@@ -9,10 +9,11 @@ def rand_test(n_iter=5, k=8, verbose=True):
     for i in xrange(n_iter):
         if verbose:
             print 'iter: {}'.format(i)
-        est = KMeans(n_clusters=k, init='random', n_init=10, max_iter=300)
+        est = GMM(n_components=k, covariance_type='full')
         est.fit(x)
-        ari_v = metrics.adjusted_rand_score(y, est.labels_)
-        s_v = metrics.silhouette_score(x, est.labels_, metric='euclidean')
+        y_pred = est.predict(x)
+        ari_v = metrics.adjusted_rand_score(y, y_pred)
+        s_v = metrics.silhouette_score(x, y_pred, metric='euclidean')
         if verbose:
             print ari_v, s_v
         ari.append(ari_v)
@@ -37,8 +38,8 @@ def eval_k(max_k=10):
     pl.ylabel('Result')
     pl.xlabel('K')
     pl.show()
-        
+    
+
 if __name__ == "__main__":
-    x, y = load_data(k=2)
-    rand_test(k=6)
-#     eval_k(10)
+    x, y = load_data(2)
+    eval_k(max_k=10)
